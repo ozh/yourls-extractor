@@ -14,10 +14,14 @@
 // Config
 // ---------------------------------------------------------------------------
 
-$EXCLUDE_DIRS = ['.git', '.github', '.idea', '.vs', 'coverage', 'node_modules', '.phpunit.cache', '.phpunit',
+$EXCLUDE_DIRS = ['.git*', '.idea', '.vs', 'coverage', 'node_modules', '.phpunit*',
                  'css', 'images', 'js',
                  'vendor', 'user', 'tests',
                  ];
+
+// Glob patterns matched against the filename only (basename), not the full path.
+// Supports * and ? wildcards.
+$EXCLUDE_FILES = ['test*.php', 'bench*.php'];
 
 // ---------------------------------------------------------------------------
 // Data structures (plain arrays)
@@ -214,6 +218,25 @@ function parse_file(string $filepath, bool $debug = false): array {
         $constants[] = make_constant($name, $value, $doc, $filepath, $line);
     }
 
+    // ---- Implicit constants (YOURLS_* referenced but not defined here) ----
+    // Two passes: defined('YOURLS_FOO') calls, then bare YOURLS_FOO usage.
+    $defined_names = array_column($constants, 'name');
+    $impl_names    = [];
+    $pass1_re = '/defined\s*\(\s*[\'"](?P<n>YOURLS_[A-Z0-9_]{3,})[\'"]\s*\)/';
+    $pass2_re = '/(?<![\'\"(])\b(?P<n>YOURLS_[A-Z0-9_]{3,})\b(?![\'\"(])/';
+    foreach ([$pass1_re, $pass2_re] as $impl_re) {
+        preg_match_all($impl_re, $content, $impl_matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
+        foreach ($impl_matches as $m) {
+            $name = $m['n'][0];
+            if (in_array($name, $defined_names, true)) continue;
+            if (in_array($name, $impl_names, true))    continue;
+            $line          = line_number($content, $m[0][1]);
+            $constants[]   = make_constant($name, '(implicit)', '', $filepath, $line);
+            $defined_names[] = $name;
+            $impl_names[]    = $name;
+        }
+    }
+
     // ---- SQL Schema ----
     $tables = parse_sql_schema($content, $filepath, $debug);
 
@@ -224,16 +247,24 @@ function parse_file(string $filepath, bool $debug = false): array {
 // Directory walker
 // ---------------------------------------------------------------------------
 
-function walk_yourls(string $root, array $exclude_dirs): array {
+function file_is_excluded(string $filename, array $exclude_files): bool {
+    foreach ($exclude_files as $pattern) {
+        if (fnmatch($pattern, $filename)) return true;
+    }
+    return false;
+}
+
+function walk_yourls(string $root, array $exclude_dirs, array $exclude_files): array {
     $php_files = [];
     $iterator  = new RecursiveIteratorIterator(
         new RecursiveCallbackFilterIterator(
             new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
-            function ($current) use ($exclude_dirs) {
+            function ($current) use ($exclude_dirs, $exclude_files) {
                 if ($current->isDir()) {
-                    return !in_array($current->getFilename(), $exclude_dirs, true);
+                    return !file_is_excluded($current->getFilename(), $exclude_dirs);
                 }
-                return $current->getExtension() === 'php';
+                if ($current->getExtension() !== 'php') return false;
+                return !file_is_excluded($current->getFilename(), $exclude_files);
             }
         )
     );
@@ -346,17 +377,46 @@ function render_markdown(array $functions, array $hooks, array $constants, array
     $l();
 
     // ---- Constants ----
+    // Deduplicate: explicit define() wins over implicit references; keep first file occurrence.
+    $seen_consts    = [];
+    $deduped_consts = [];
+    // Sort so explicit (non-implicit) come first — they win deduplication
+    usort($constants, fn($a, $b) => ($a['value'] === '(implicit)' ? 1 : 0) <=> ($b['value'] === '(implicit)' ? 1 : 0));
+    foreach ($constants as $c) {
+        if (!isset($seen_consts[$c['name']])) {
+            $seen_consts[$c['name']] = true;
+            $deduped_consts[]        = $c;
+        }
+    }
+    usort($deduped_consts, fn($a, $b) => $a['name'] <=> $b['name']);
+
+    $explicit = array_values(array_filter($deduped_consts, fn($c) => $c['value'] !== '(implicit)'));
+    $implicit = array_values(array_filter($deduped_consts, fn($c) => $c['value'] === '(implicit)'));
+
     $l('## Constants');
     $l();
     $l('| Name | Value | Description | File |');
     $l('|------|-------|-------------|------|');
-    usort($constants, fn($a, $b) => $a['name'] <=> $b['name']);
-    foreach ($constants as $c) {
+    foreach ($explicit as $c) {
         $f    = shorten_file($c['file'], $root);
         $desc = mb_strlen($c['docblock']) > 80 ? mb_substr($c['docblock'], 0, 80) . '…' : $c['docblock'];
         $l("| `{$c['name']}` | `{$c['value']}` | {$desc} | `{$f}:{$c['line']}` |");
     }
     $l();
+
+    if ($implicit) {
+        $l('## Implicit Constants');
+        $l();
+        $l('> Referenced in code but never explicitly `define()`d. Intended to be set by the user in `config.php`.');
+        $l();
+        $l('| Name | First seen in |');
+        $l('|------|--------------|');
+        foreach ($implicit as $c) {
+            $f = shorten_file($c['file'], $root);
+            $l("| `{$c['name']}` | `{$f}:{$c['line']}` |");
+        }
+        $l();
+    }
 
     return implode("\n", $out);
 }
@@ -393,7 +453,7 @@ if (!$root || !is_dir($root)) {
     exit(1);
 }
 
-$php_files = walk_yourls($root, $EXCLUDE_DIRS);
+$php_files = walk_yourls($root, $EXCLUDE_DIRS, $EXCLUDE_FILES);
 if (!$php_files) {
     fwrite(STDERR, "Error: no PHP files found in {$root}\n");
     exit(1);
