@@ -1212,6 +1212,10 @@ Table name constants: `YOURLS_DB_TABLE_URL`, `YOURLS_DB_TABLE_OPTIONS`, `YOURLS_
 **`yourls_xml_encode($array)`**
 — Return XML output. @param array $array @return string
 
+### `yourls-mcp.php`
+
+**`yourls_api_call(array $params)`**
+
 ## Filters (`yourls_apply_filters`)
 
 | Hook | Args | File |
@@ -1336,16 +1340,14 @@ Table name constants: `YOURLS_DB_TABLE_URL`, `YOURLS_DB_TABLE_OPTIONS`, `YOURLS_
 
 | Name | Value | Description | File |
 |------|-------|-------------|------|
+| `MCP_SERVER_NAME` | `'yourls-mcp'` |  | `yourls-mcp.php:33` |
+| `MCP_SERVER_VERSION` | `'1.0.0'` |  | `yourls-mcp.php:34` |
 | `YOURLS_ABSPATH` | `$this->root` |  | `includes\Config\Config.php:122` |
 | `YOURLS_ADMIN` | `true` |  | `admin\admin-ajax.php:2` |
-| `YOURLS_ADMIN` | `true` |  | `admin\index.php:2` |
-| `YOURLS_ADMIN` | `true` |  | `admin\install.php:2` |
-| `YOURLS_ADMIN` | `true` |  | `admin\plugins.php:2` |
-| `YOURLS_ADMIN` | `true` |  | `admin\tools.php:2` |
-| `YOURLS_ADMIN` | `true` |  | `admin\upgrade.php:2` |
 | `YOURLS_ADMIN_SSL` | `false` |  | `includes\Config\Config.php:202` |
 | `YOURLS_AJAX` | `true` |  | `admin\admin-ajax.php:3` |
 | `YOURLS_API` | `true` |  | `yourls-api.php:10` |
+| `YOURLS_API_PATH` | `'/yourls-api.php'` |  | `yourls-mcp.php:35` |
 | `YOURLS_ASSETDIR` | `YOURLS_ABSPATH.'/assets'` |  | `includes\Config\Config.php:138` |
 | `YOURLS_ASSETURL` | `trim(YOURLS_SITE, '/'` |  | `includes\Config\Config.php:142` |
 | `YOURLS_CONFIGFILE` | `$config->find_config(` |  | `includes\load-yourls.php:18` |
@@ -1355,24 +1357,18 @@ Table name constants: `YOURLS_DB_TABLE_URL`, `YOURLS_DB_TABLE_OPTIONS`, `YOURLS_
 | `YOURLS_DB_TABLE_URL` | `YOURLS_DB_PREFIX.'url'` |  | `includes\Config\Config.php:170` |
 | `YOURLS_DB_VERSION` | `'507'` | YOURLS DB version. Increments when changes are made to the DB schema, to trigger… | `includes\version.php:14` |
 | `YOURLS_DEBUG` | `false` |  | `includes\Config\Config.php:206` |
-| `YOURLS_DEBUG` | `false` |  | `test.php:7` |
-| `YOURLS_FAST_INIT` | `true` |  | `test.php:8` |
 | `YOURLS_FLOOD_DELAY_SECONDS` | `15` |  | `includes\Config\Config.php:182` |
 | `YOURLS_FLOOD_IP_WHITELIST` | `''` |  | `includes\Config\Config.php:186` |
 | `YOURLS_GO` | `true` |  | `yourls-go.php:2` |
 | `YOURLS_INC` | `YOURLS_ABSPATH.'/includes'` |  | `includes\Config\Config.php:126` |
 | `YOURLS_INFOS` | `true` |  | `yourls-infos.php:3` |
 | `YOURLS_INSTALLING` | `true` |  | `admin\install.php:3` |
-| `YOURLS_INSTALLING` | `false` |  | `test.php:5` |
-| `YOURLS_LANG` | `'fr_FR'` |  | `test.php:10` |
 | `YOURLS_LANG_DIR` | `YOURLS_USERDIR.'/languages'` |  | `includes\Config\Config.php:146` |
 | `YOURLS_NONCE_LIFE` | `43200` |  | `includes\Config\Config.php:194` |
 | `YOURLS_NOSTATS` | `false` |  | `includes\Config\Config.php:198` |
-| `YOURLS_NO_VERSION_CHECK` | `true` |  | `test.php:6` |
 | `YOURLS_PAGEDIR` | `YOURLS_USERDIR.'/pages'` |  | `includes\Config\Config.php:166` |
 | `YOURLS_PLUGINDIR` | `YOURLS_USERDIR.'/plugins'` |  | `includes\Config\Config.php:150` |
 | `YOURLS_PLUGINURL` | `YOURLS_USERURL.'/plugins'` |  | `includes\Config\Config.php:154` |
-| `YOURLS_PRIVATE` | `false` |  | `test.php:9` |
 | `YOURLS_THEMEDIR` | `YOURLS_USERDIR.'/themes'` |  | `includes\Config\Config.php:158` |
 | `YOURLS_THEMEURL` | `YOURLS_USERURL.'/themes'` |  | `includes\Config\Config.php:162` |
 | `YOURLS_UNINSTALL_PLUGIN` | `true` |  | `includes\functions-plugins.php:698` |
@@ -1381,3 +1377,39 @@ Table name constants: `YOURLS_DB_TABLE_URL`, `YOURLS_DB_TABLE_OPTIONS`, `YOURLS_
 | `YOURLS_USERDIR` | `YOURLS_ABSPATH.'/user'` |  | `includes\Config\Config.php:130` |
 | `YOURLS_USERURL` | `trim(YOURLS_SITE, '/'` |  | `includes\Config\Config.php:134` |
 | `YOURLS_VERSION` | `'1.10.4-dev'` | YOURLS version Must be one of the following : MAJOR.MINOR (eg 1.8) MAJOR.MINOR.P… | `includes\version.php:2` |
+
+## Implicit Constants
+
+> Referenced in code but never explicitly `define()`d. Intended to be set by the user in `config.php`.
+
+| Name | First seen in |
+|------|--------------|
+| `YOURLS_COOKIEKEY` | `includes\functions-auth.php:599` |
+| `YOURLS_DB_DRIVER` | `includes\functions-http.php:310` |
+| `YOURLS_DB_HOST` | `includes\class-mysql.php:16` |
+| `YOURLS_DB_NAME` | `includes\class-mysql.php:15` |
+| `YOURLS_DB_PASS` | `includes\class-mysql.php:14` |
+| `YOURLS_DB_PREFIX` | `includes\Config\Config.php:170` |
+| `YOURLS_DB_TABLE_` | `claude.php:83` |
+| `YOURLS_DB_TABLE_NEXTDEC` | `includes\functions-upgrade.php:311` |
+| `YOURLS_DB_USER` | `includes\class-mysql.php:13` |
+| `YOURLS_FAST_INIT` | `includes\Config\Init.php:61` |
+| `YOURLS_FOO` | `claude.php:222` |
+| `YOURLS_HOURS_OFFSET` | `includes\functions-formatting.php:844` |
+| `YOURLS_LANG` | `includes\functions-l10n.php:40` |
+| `YOURLS_NO_HASH_PASSWORD` | `includes\functions-auth.php:746` |
+| `YOURLS_NO_VERSION_CHECK` | `includes\functions-http.php:504` |
+| `YOURLS_PASSWORD` | `includes\functions-auth.php:708` |
+| `YOURLS_PRIVATE` | `includes\functions-http.php:317` |
+| `YOURLS_PRIVATE_API` | `includes\functions.php:610` |
+| `YOURLS_PRIVATE_INFOS` | `includes\functions.php:614` |
+| `YOURLS_PROXY` | `includes\functions-deprecated.php:277` |
+| `YOURLS_PROXY_BYPASS_HOSTS` | `includes\functions-http.php:114` |
+| `YOURLS_PROXY_PASSWORD` | `includes\functions-http.php:99` |
+| `YOURLS_PROXY_USERNAME` | `includes\functions-http.php:99` |
+| `YOURLS_SIGNATURE` | `yourls-mcp.php:10` |
+| `YOURLS_SITE` | `includes\functions-http.php:303` |
+| `YOURLS_UNIQUE_URLS` | `includes\functions-http.php:318` |
+| `YOURLS_URL` | `yourls-mcp.php:9` |
+| `YOURLS_URL_CONVERT` | `includes\functions-http.php:319` |
+| `YOURLS_USERNAME` | `yourls-mcp.php:11` |
