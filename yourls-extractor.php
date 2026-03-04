@@ -285,7 +285,7 @@ function parse_file(string $filepath, bool $debug = false): array {
     }
 
     // ---- Filters ----
-    $filter_re = "/yourls_apply_filters\s*\(\s*'(?P<n>[^']+)'(?P<args>.*?)\)/s";
+    $filter_re = "/yourls_apply_filter\s*\(\s*'(?P<n>[^']+)'(?P<args>.*?)\)/s";
     preg_match_all($filter_re, $content, $filter_matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER);
     foreach ($filter_matches as $m) {
         $hooks[] = make_hook('filter', $m['n'][0], parse_hook_args($m['args'][0]), $filepath, line_number($content, $m[0][1]));
@@ -480,7 +480,7 @@ function render_markdown(array $functions, array $hooks, array $constants, array
     $filters = $dedup($filters);
     $actions = $dedup($actions);
 
-    $l('## Filters (`yourls_apply_filters`)');
+    $l('## Filters (`yourls_apply_filter`)');
     $l();
     $l('| Hook | Args | File |');
     $l('|------|------|------|');
