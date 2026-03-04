@@ -1373,10 +1373,262 @@ Table name constants: `YOURLS_DB_TABLE_URL`, `YOURLS_DB_TABLE_OPTIONS`, `YOURLS_
 **`public register_globals()`**
 — Global variables are deprecated. For backwards compatibility only. @return void
 
-## Filters (`yourls_apply_filters`)
+## Filters (`yourls_apply_filter`)
 
 | Hook | Args | File |
 |------|------|------|
+| `action_links` | `$action_links, $keyword, $url, $ip, $clicks, $timestamp` | `includes\functions-html.php:639` |
+| `add_new_link` | `$return, $url, $keyword, $title` | `includes\functions-shorturls.php:165` |
+| `add_new_link_already_stored_filter` | `$return, $url, $keyword, $title` | `includes\functions-shorturls.php:90` |
+| `add_new_link_fail_noloop` | `$return, $url, $keyword, $title` | `includes\functions-shorturls.php:72` |
+| `add_new_link_fail_nourl` | `$return, $url, $keyword, $title` | `includes\functions-shorturls.php:59` |
+| `add_new_link_keyword_exists` | `$return, $url, $keyword, $title` | `includes\functions-shorturls.php:115` |
+| `add_new_title` | `$title, $url, $keyword` | `includes\functions-shorturls.php:99` |
+| `add_row_protocol_warning` | `—` | `includes\functions-html.php:646` |
+| `admin_links` | `$admin_links` | `includes\functions-html.php:858` |
+| `admin_params_possible_date_sort` | `—` | `includes\Views\AdminParams.php:68` |
+| `admin_params_possible_search` | `—` | `includes\Views\AdminParams.php:55` |
+| `admin_params_possible_sort` | `—` | `includes\Views\AdminParams.php:57` |
+| `admin_params_possible_translations` | `—` | `includes\Views\AdminParams.php:59` |
+| `admin_sublinks` | `$admin_sublinks` | `includes\functions-html.php:859` |
+| `admin_url` | `$admin, $page` | `includes\functions-links.php:171` |
+| `admin_view_click_filter` | `—` | `includes\Views\AdminParams.php:212` |
+| `admin_view_click_limit` | `—` | `includes\Views\AdminParams.php:232` |
+| `admin_view_date_filter` | `—` | `includes\Views\AdminParams.php:250` |
+| `admin_view_date_first_` | `$date_filter` | `includes\Views\AdminParams.php:261` |
+| `admin_view_date_first_between` | `—` | `includes\Views\AdminParams.php:272` |
+| `admin_view_date_first_unset` | `—` | `includes\Views\AdminParams.php:279` |
+| `admin_view_date_second_between` | `—` | `includes\Views\AdminParams.php:273` |
+| `admin_view_date_second_unset` | `—` | `includes\Views\AdminParams.php:280` |
+| `admin_view_get_search_text` | `$search` | `includes\Views\AdminParams.php:132` |
+| `admin_view_per_page` | `$default` | `includes\Views\AdminParams.php:88` |
+| `admin_view_search_in` | `—` | `includes\Views\AdminParams.php:148` |
+| `admin_view_sort_by` | `—` | `includes\Views\AdminParams.php:167` |
+| `admin_view_sort_order` | `—` | `includes\Views\AdminParams.php:198` |
+| `allow_duplicate_longurls` | `—` | `includes\functions.php:634` |
+| `api_action_` | `$action` | `yourls-api.php:35` |
+| `api_actions` | `$api_actions` | `yourls-api.php:27` |
+| `api_db_stats` | `$return` | `includes\functions-api.php:197` |
+| `api_expand` | `$return, $shorturl` | `includes\functions-api.php:246` |
+| `api_result_db_stats` | `—` | `includes\functions-api.php:47` |
+| `api_result_expand` | `$shorturl` | `includes\functions-api.php:69` |
+| `api_result_shorturl` | `$return` | `includes\functions-api.php:24` |
+| `api_result_stats` | `$filter, $limit, $start` | `includes\functions-api.php:37` |
+| `api_result_url_stats` | `$shorturl` | `includes\functions-api.php:58` |
+| `api_result_version` | `$return` | `includes\functions-api.php:82` |
+| `api_stats` | `$return, $filter, $limit, $start` | `includes\functions-api.php:181` |
+| `api_url_stats` | `$return, $shorturl` | `includes\functions-api.php:212` |
+| `bodyclass` | `—` | `includes\functions-html.php:76` |
+| `check_timestamp` | `$now` | `includes\functions-auth.php:445` |
+| `content_type_header_charset` | `—` | `includes\functions.php:379` |
+| `cookie_name` | `—` | `includes\functions-auth.php:564` |
+| `create_nonce` | `$nonce, $action, $user` | `includes\functions-auth.php:631` |
+| `custom_keyword` | `$keyword, $url, $title` | `includes\functions-shorturls.php:106` |
+| `date_i18n` | `$date, $req_format, $timestamp` | `includes\functions-l10n.php:657` |
+| `db_connect_attributes` | `$context` | `includes\class-mysql.php:57` |
+| `db_connect_charset` | `$context` | `includes\class-mysql.php:35` |
+| `db_connect_custom_dsn` | `$dsn, $context` | `includes\class-mysql.php:46` |
+| `db_connect_driver_option` | `$context` | `includes\class-mysql.php:56` |
+| `deprecated_function_trigger_error` | `—` | `includes\functions.php:1262` |
+| `die_message` | `$message` | `includes\functions-html.php:524` |
+| `die_title` | `$title` | `includes\functions-html.php:523` |
+| `edit_link` | `$return, $url, $keyword, $newkeyword, $title` | `includes\functions-shorturls.php:356` |
+| `esc_attr` | `$safe_text, $text` | `includes\functions-formatting.php:536` |
+| `esc_html` | `$safe_text, $text` | `includes\functions-formatting.php:522` |
+| `esc_js` | `$safe_text, $text` | `includes\functions-formatting.php:749` |
+| `esc_textarea` | `$safe_text, $text` | `includes\functions-formatting.php:762` |
+| `esc_url` | `$url, $original_url, $context` | `includes\functions-formatting.php:609` |
+| `esc_url_protocols` | `$yourls_allowedprotocols` | `includes\functions-formatting.php:599` |
+| `geo_countrycode_to_countryname` | `$countries, $code` | `includes\functions-geo.php:143` |
+| `geo_get_flag` | `$img, $code` | `includes\functions-geo.php:156` |
+| `geo_ip_path_to_db` | `—` | `includes\functions-geo.php:34` |
+| `geo_ip_to_countrycode` | `$location` | `includes\functions-geo.php:64` |
+| `geo_use_cloudflare` | `—` | `includes\functions-geo.php:24` |
+| `get_IP` | `$ip` | `includes\functions.php:40` |
+| `get_available_languages` | `$languages` | `includes\functions-l10n.php:580` |
+| `get_cookie_life` | `—` | `includes\functions-auth.php:535` |
+| `get_date_format` | `—` | `includes\functions-formatting.php:867` |
+| `get_datetime_format` | `—` | `includes\functions-formatting.php:856` |
+| `get_db` | `$ydb, $context` | `includes\class-mysql.php:123` |
+| `get_db_stats` | `$return, $where` | `includes\functions.php:216` |
+| `get_favicon_url` | `$favicon` | `includes\functions-links.php:270` |
+| `get_keyword_info` | `$return, $keyword, $field, $notfound` | `includes\functions-shorturls.php:555` |
+| `get_keyword_infos` | `$ydb, $keyword` | `includes\functions-shorturls.php:512` |
+| `get_link_stats` | `$return, $shorturl` | `includes\functions-shorturls.php:649` |
+| `get_locale` | `$yourls_locale` | `includes\functions-l10n.php:47` |
+| `get_longurl_keywords` | `—` | `includes\functions-shorturls.php:669` |
+| `get_next_decimal` | `—` | `includes\functions.php:50` |
+| `get_nonce_life` | `—` | `includes\functions-auth.php:550` |
+| `get_num_queries` | `—` | `includes\functions-debug.php:38` |
+| `get_option_` | `$option_name, $value` | `includes\functions-options.php:27` |
+| `get_protocol` | `$matches` | `includes\functions.php:1210` |
+| `get_referrer` | `$referrer` | `includes\functions.php:243` |
+| `get_relative_url` | `$_url, $url` | `includes\functions.php:1236` |
+| `get_remote_title` | `$title, $url` | `includes\functions.php:972` |
+| `get_remote_title_max_byte` | `—` | `includes\functions.php:910` |
+| `get_request` | `$request` | `includes\functions.php:1071` |
+| `get_shorturl_charset` | `$charset` | `includes\functions-shorturls.php:181` |
+| `get_stats` | `$return, $filter, $limit, $start` | `includes\functions.php:197` |
+| `get_time_format` | `—` | `includes\functions-formatting.php:878` |
+| `get_time_offset` | `$offset` | `includes\functions-formatting.php:845` |
+| `get_timestamp` | `$timestamp_offset, $timestamp, $offset` | `includes\functions-formatting.php:834` |
+| `get_user_agent` | `$ua` | `includes\functions.php:232` |
+| `get_yourls_site` | `—` | `includes\functions-links.php:206` |
+| `hash_algo` | `—` | `includes\functions-auth.php:256` |
+| `hash_options` | `—` | `includes\functions-auth.php:266` |
+| `help_link` | `—` | `includes\functions-html.php:835` |
+| `hmac_algo` | `—` | `includes\functions-auth.php:610` |
+| `html_footer_text` | `$footer` | `includes\functions-html.php:162` |
+| `html_head_content-type` | `—` | `includes\functions-html.php:68` |
+| `html_head_meta_content-type` | `—` | `includes\functions-html.php:90` |
+| `html_language_attributes` | `$output` | `includes\functions-html.php:977` |
+| `html_language_attributes_doctype` | `—` | `includes\functions-html.php:966` |
+| `html_link` | `$link` | `includes\functions-html.php:766` |
+| `html_select` | `$html, $name, $options, $selected, $display` | `includes\functions-html.php:416` |
+| `html_select_options` | `$options, $name, $selected, $display, $label` | `includes\functions-html.php:408` |
+| `html_title` | `$title, $context` | `includes\functions-html.php:83` |
+| `http_default_options` | `$options` | `includes\functions-http.php:139` |
+| `http_default_options_timeout` | `—` | `includes\functions-http.php:129` |
+| `http_get_proxy` | `$proxy` | `includes\functions-http.php:104` |
+| `http_get_proxy_bypass_host` | `$hosts` | `includes\functions-http.php:116` |
+| `http_request_data` | `$data` | `includes\functions-http.php:236` |
+| `http_request_headers` | `$headers` | `includes\functions-http.php:235` |
+| `http_request_options` | `$options` | `includes\functions-http.php:237` |
+| `http_request_type` | `$type` | `includes\functions-http.php:233` |
+| `http_request_url` | `$url` | `includes\functions-http.php:234` |
+| `http_user_agent` | `—` | `includes\functions-http.php:255` |
+| `int2string` | `$string, $num, $chars` | `includes\functions-formatting.php:26` |
+| `is_API` | `—` | `includes\functions.php:801` |
+| `is_Ajax` | `—` | `includes\functions.php:810` |
+| `is_GO` | `—` | `includes\functions.php:819` |
+| `is_admin` | `—` | `includes\functions.php:837` |
+| `is_allowed_protocol` | `$url` | `includes\functions.php:1183` |
+| `is_infos` | `—` | `includes\functions.php:828` |
+| `is_installed` | `—` | `includes\functions.php:726` |
+| `is_installing` | `—` | `includes\functions.php:703` |
+| `is_mobile_device` | `$is_mobile` | `includes\functions.php:1011` |
+| `is_page` | `$keyword` | `includes\functions-shorturls.php:462` |
+| `is_private` | `$private` | `includes\functions.php:620` |
+| `is_shorturl` | `$is_short, $shorturl` | `includes\functions-shorturls.php:207` |
+| `is_ssl` | `$is_ssl` | `includes\functions.php:881` |
+| `is_upgrading` | `—` | `includes\functions.php:713` |
+| `is_user_from_env` | `—` | `includes\functions-auth.php:711` |
+| `is_valid_user` | `$unfiltered_valid` | `includes\functions-auth.php:93` |
+| `keyword_is_free` | `$free, $keyword` | `includes\functions-shorturls.php:450` |
+| `keyword_is_reserved` | `$reserved, $keyword` | `includes\functions-shorturls.php:240` |
+| `keyword_is_taken` | `$taken, $keyword` | `includes\functions-shorturls.php:490` |
+| `kses_allowed_entities` | `—` | `includes\functions-kses.php:58` |
+| `kses_allowed_protocols` | `—` | `includes\functions-kses.php:62` |
+| `kses_allowed_tags` | `$yourls_allowedtags` | `includes\functions-kses.php:79` |
+| `kses_allowed_tags_all` | `$yourls_allowedtags_all` | `includes\functions-kses.php:70` |
+| `load_custom_textdomain` | `—` | `includes\functions-l10n.php:1003` |
+| `load_textdomain_mofile` | `$mofile, $domain` | `includes\functions-l10n.php:457` |
+| `logout_link` | `—` | `includes\functions-html.php:831` |
+| `match_current_protocol` | `$url` | `includes\functions-links.php:232` |
+| `maybe_hash_password` | `$hash` | `includes\functions-auth.php:736` |
+| `needs_ssl` | `—` | `includes\functions.php:855` |
+| `number_format_i18n` | `$formatted` | `includes\functions-l10n.php:598` |
+| `override_load_textdomain` | `$domain, $mofile` | `includes\functions-l10n.php:449` |
+| `override_unload_textdomain` | `$domain` | `includes\functions-l10n.php:487` |
+| `plugin_url` | `$url, $file` | `includes\functions-plugins.php:740` |
+| `plugins_sort_callback` | `—` | `includes\functions-plugins.php:816` |
+| `pre_yourls_info_countries` | `$countries` | `yourls-infos.php:192` |
+| `pre_yourls_info_dates` | `$dates` | `yourls-infos.php:187` |
+| `pre_yourls_info_direct` | `$direct` | `yourls-infos.php:185` |
+| `pre_yourls_info_last_24h` | `$last_24h` | `yourls-infos.php:191` |
+| `pre_yourls_info_list_of_days` | `$list_of_days` | `yourls-infos.php:188` |
+| `pre_yourls_info_list_of_months` | `$list_of_months` | `yourls-infos.php:189` |
+| `pre_yourls_info_list_of_years` | `$list_of_years` | `yourls-infos.php:190` |
+| `pre_yourls_info_notdirect` | `$notdirect` | `yourls-infos.php:186` |
+| `pre_yourls_info_referrer_sort` | `$referrer_sort` | `yourls-infos.php:184` |
+| `pre_yourls_info_referrers` | `$referrers` | `yourls-infos.php:183` |
+| `random_keyword` | `$keyword, $url, $title` | `includes\functions-shorturls.php:126` |
+| `redirect_code` | `$code, $location` | `includes\Http\Redirection.php:19` |
+| `redirect_javascript` | `$location, $dontwait` | `includes\functions.php:421` |
+| `redirect_location` | `$location, $code` | `includes\Http\Redirection.php:18` |
+| `rnd_string` | `$str, $length, $type, $charlist` | `includes\functions.php:792` |
+| `robots_tag_header` | `—` | `includes\functions.php:323` |
+| `robots_tag_header_replace` | `—` | `includes\functions.php:324` |
+| `sanitize_string` | `$valid, $keyword, $restrict_to_shorturl_charset` | `includes\functions-formatting.php:89` |
+| `sanitize_title` | `$title, $unsafe_title, $fallback` | `includes\functions-formatting.php:110` |
+| `sanitize_url` | `$url, $unsafe_url` | `includes\functions-formatting.php:124` |
+| `sanitize_url_safe` | `$url, $unsafe_url` | `includes\functions-formatting.php:143` |
+| `set_cookie_value` | `$user` | `includes\functions-auth.php:575` |
+| `setcookie_domain` | `—` | `includes\functions-auth.php:464` |
+| `setcookie_httponly` | `—` | `includes\functions-auth.php:466` |
+| `setcookie_path` | `—` | `includes\functions-auth.php:463` |
+| `setcookie_samesite` | `—` | `includes\functions-auth.php:501` |
+| `setcookie_secure` | `—` | `includes\functions-auth.php:465` |
+| `share_box_data` | `$data` | `includes\functions-html.php:458` |
+| `shunt_add_new_link` | `—` | `includes\functions-shorturls.php:34` |
+| `shunt_all_options` | `—` | `includes\functions-options.php:43` |
+| `shunt_check_IP_flood` | `—` | `includes\functions.php:646` |
+| `shunt_delete_link_by_keyword` | `—` | `includes\functions-shorturls.php:251` |
+| `shunt_edit_link` | `—` | `includes\functions-shorturls.php:340` |
+| `shunt_edit_link_title` | `—` | `includes\functions-shorturls.php:419` |
+| `shunt_geo_countrycode_to_countryname` | `—` | `includes\functions-geo.php:79` |
+| `shunt_geo_ip_to_countrycode` | `—` | `includes\functions-geo.php:17` |
+| `shunt_get_database_version` | `—` | `includes\functions-install.php:30` |
+| `shunt_get_db` | `—` | `includes\class-mysql.php:99` |
+| `shunt_get_keyword_info` | `—` | `includes\functions-shorturls.php:543` |
+| `shunt_get_remote_title` | `—` | `includes\functions.php:896` |
+| `shunt_get_request` | `—` | `includes\functions.php:1028` |
+| `shunt_html_addnew` | `—` | `includes\functions-html.php:184` |
+| `shunt_html_favicon` | `—` | `includes\functions-html.php:1070` |
+| `shunt_is_valid_user` | `—` | `includes\functions-auth.php:28` |
+| `shunt_keyword_is_taken` | `—` | `includes\functions-shorturls.php:478` |
+| `shunt_log_redirect` | `—` | `includes\functions.php:518` |
+| `shunt_maybe_check_core_version` | `—` | `includes\functions-http.php:455` |
+| `shunt_no_frame_header` | `—` | `includes\functions.php:359` |
+| `shunt_option_` | `$option_name` | `includes\functions-options.php:19` |
+| `shunt_robots_tag_header` | `—` | `includes\functions.php:317` |
+| `shunt_send_through_proxy` | `—` | `includes\functions-http.php:155` |
+| `shunt_share_box` | `—` | `includes\functions-html.php:442` |
+| `shunt_update_clicks` | `—` | `includes\functions.php:92` |
+| `shunt_url_exists` | `—` | `includes\functions-shorturls.php:313` |
+| `shunt_yourls_create_sql_tables` | `—` | `includes\functions-install.php:204` |
+| `shunt_yourls_http_request` | `—` | `includes\functions-http.php:221` |
+| `site_url` | `$url` | `includes\functions-links.php:189` |
+| `skip_password_hashing` | `—` | `includes\functions-auth.php:746` |
+| `skip_version_check` | `—` | `includes\functions-http.php:504` |
+| `stat_query_country` | `$sql` | `yourls-infos.php:97` |
+| `stat_query_dates` | `$sql` | `yourls-infos.php:120` |
+| `stat_query_last24h` | `$sql` | `yourls-infos.php:163` |
+| `stat_query_referrer` | `$sql` | `yourls-infos.php:62` |
+| `statistics_show_referrers` | `—` | `yourls-infos.php:214` |
+| `stats_countries_map` | `$map, $countries, $options, $id` | `includes\functions-infos.php:32` |
+| `stats_countries_map_options` | `$options` | `includes\functions-infos.php:28` |
+| `stats_line` | `$lineChart, $values, $options, $id` | `includes\functions-infos.php:218` |
+| `stats_line_options` | `$options` | `includes\functions-infos.php:214` |
+| `stats_pie` | `$pie, $data, $limit, $size, $options, $id` | `includes\functions-infos.php:89` |
+| `stats_pie_options` | `$options` | `includes\functions-infos.php:82` |
+| `string2int` | `$integer, $string, $chars` | `includes\functions-formatting.php:48` |
+| `table_add_row` | `$row, $keyword, $url, $title, $ip, $clicks, $timestamp` | `includes\functions-html.php:693` |
+| `table_add_row_action_array` | `$actions, $keyword` | `includes\functions-html.php:629` |
+| `table_add_row_cell_array` | `$cells, $keyword, $url, $title, $ip, $clicks, $timestamp` | `includes\functions-html.php:683` |
+| `table_edit_row` | `$return, $keyword, $url, $title` | `includes\functions-html.php:567` |
+| `table_end` | `—` | `includes\functions-html.php:747` |
+| `table_head_cells` | `—` | `includes\functions-html.php:707` |
+| `table_head_end` | `$end` | `includes\functions-html.php:720` |
+| `table_head_start` | `$start` | `includes\functions-html.php:705` |
+| `table_tbody_end` | `—` | `includes\functions-html.php:738` |
+| `table_tbody_start` | `—` | `includes\functions-html.php:729` |
+| `translate` | `$translations, $text` | `includes\functions-l10n.php:63` |
+| `translate_n` | `$translation, $single, $plural, $number, $domain` | `includes\functions-l10n.php:332` |
+| `translate_nx` | `$translation, $single, $plural, $number, $context, $domain` | `includes\functions-l10n.php:352` |
+| `translate_with_context` | `$translations, $text, $context` | `includes\functions-l10n.php:84` |
+| `trim_long_string` | `$newstring, $string, $length, $append` | `includes\functions-formatting.php:229` |
+| `unique_element_id` | `$prefix` | `includes\functions-formatting.php:64` |
+| `url_exists` | `$url_exists, $url` | `includes\functions-shorturls.php:326` |
+| `validate_jsonp_callback` | `$callback` | `includes\functions-formatting.php:297` |
+| `validate_jsonp_callback_error` | `$callback` | `includes\functions-formatting.php:288` |
+| `verify_nonce` | `$action, $nonce, $user, $return` | `includes\functions-auth.php:688` |
+| `version_check_stuff` | `$stuff` | `includes\functions-http.php:329` |
+| `yourls_event` | `—` | `includes\functions-plugins.php:182` |
+| `yourls_hook` | `$yourls_var` | `includes\functions-plugins.php:179` |
+| `yourls_link` | `$link, $keyword` | `includes\functions-links.php:144` |
+| `yourls_salt` | `—` | `includes\functions-auth.php:600` |
+| `yourls_statlink` | `$link, $keyword` | `includes\functions-links.php:157` |
 
 ## Actions (`yourls_do_action`)
 
